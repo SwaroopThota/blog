@@ -1,0 +1,7 @@
+<h1>All Posts</h1>
+<% if(posts.length> 0){ %>
+    <% posts.forEach(post=>{ %>
+        <%- include('partials/_display_post',{post:post}) %>
+            <% });}else{ %>
+                <p>No posts to display.</p>
+                <% } %>

@@ -1,0 +1,15 @@
+.nav-link:hover {
+  color: #1abc9c !important;
+}
+.navbar-brand {
+  letter-spacing: 5px;
+}
+.body {
+  min-height: calc(100vh - 116px);
+}
+
+@media only screen and (max-width: 1024px) {
+  .body {
+    min-height: calc(100vh - 144px);
+  }
+}

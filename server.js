@@ -49,7 +49,7 @@ app.get("/posts/:title", (req, res) => {
       pageTitle: "The Daily Journal | Posts | " + post.title,
     });
   } catch (e) {
-    res.status(404).send("Sorry, we can't find your requested page.");
+    res.status(404).render('error404',{pageTitle: "Page Not Found....!"})
   }
 });
 app.post("/compose", (req, res) => {

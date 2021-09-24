@@ -3,7 +3,7 @@ const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -19,10 +19,6 @@ const posts = [
     on: "18/9/2021",
   },
 ];
-
-app.listen(port, () => {
-  console.log("Server is hosted at http://192.168.31.5:" + port);
-});
 
 app.get("/", (req, res) => {
   res.render("home", { pageTitle: "The Daily Journal", posts: posts });
@@ -40,20 +36,21 @@ app.get("/posts", (req, res) => {
   res.render("posts", { posts: posts, pageTitle: "The Daily Journal | Posts" });
 });
 app.get("/posts/:title", (req, res) => {
-  req.params.title = req.params.title
-    .trim()
-    .replace("-", " ")
-    .toLocaleLowerCase();
-  let post = posts.find((post) => post.title.toLowerCase() == req.params.title);
-  if (post !== undefined) {
+  try {
+    req.params.title = req.params.title
+      .trim()
+      .replace("-", " ")
+      .toLocaleLowerCase();
+    let post = posts.find(
+      (post) => post.title.toLowerCase() == req.params.title
+    );
     res.render("post", {
       post: post,
       pageTitle: "The Daily Journal | Posts | " + post.title,
     });
-  } else {
-    res.sendStatus(404);
+  } catch (e) {
+    res.status(404).send("Sorry, we can't find your requested page.");
   }
-  //   console.log(post);
 });
 app.post("/compose", (req, res) => {
   const post = {
@@ -64,4 +61,10 @@ app.post("/compose", (req, res) => {
   };
   posts.unshift(post);
   res.redirect("/");
+});
+app.get('*', function(req, res){
+  res.status(404).render('error404',{pageTitle: "Page Not Found....!"})
+});
+app.listen(port, () => {
+  console.log("Server is hosted at http://192.168.31.5:" + port);
 });

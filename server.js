@@ -1,9 +1,14 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
+const mongoose = require("mongoose");
+const blogModel = require("./models/blog-model");
 
 const app = express();
 const port = process.env.PORT || 5000;
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/firstdb")
+.then(()=>{console.log("Connection Successful")})
+.catch(err => console.log(err));
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -11,16 +16,8 @@ app.use(expressLayouts);
 app.use(express.urlencoded({ extended: true }));
 app.set("layout", "./layouts/layout");
 
-const posts = [
-  {
-    title: "Breaking News",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident, necessitatibus consectetur cupiditate ullam voluptatibus unde. Cumque nemo neque dolorum quidem obcaecati officiis ipsa, labore nam ipsam nihil velit, sit magnam doloribus earum aut est placeat quas provident optio delectus repellat vel itaque! Odit atque molestiae vitae, laudantium non voluptates dolorum.aborum nulla asperiores reiciendis pariatur ipsam, incidunt temporibus minima doloribus aspernatur facere harum id eveniet voluptas expedita, esse explicabo dignissimos a numquam beatae repellendus quam alias obcaecati similique ut! Molestiae eaque optio ad eius officia mollitia incidunt, sed, officiis perferendis, nemo iure illum repellat rem. Explicabo eaque possimus laboriosam magnam ducimus minima temporibus quidem recusandae consectetur maxime, repellendus sequi doloribus sed labore culpa, nemo placeat velit optio doloremque. Veritatis, placeat. Dolorum rerumeum harum veniam, corporis quisquam fugit dolor, nulla incidunt illum doloribus sapiente!",
-    author: "T J Swaroop",
-    on: "18/9/2021",
-  },
-];
-
-app.get("/", (req, res) => {
+app.get("/",async (req, res) => {
+const posts = await blogModel.find();
   res.render("home", { pageTitle: "The Daily Journal", posts: posts });
 });
 app.get("/contact", (req, res) => {
@@ -32,18 +29,17 @@ app.get("/about", (req, res) => {
 app.get("/compose", (req, res) => {
   res.render("compose", { pageTitle: "The Daily Journal | Compose" });
 });
-app.get("/posts", (req, res) => {
+app.get("/posts",async (req, res) => {
+  const posts = await blogModel.find();
   res.render("posts", { posts: posts, pageTitle: "The Daily Journal | Posts" });
 });
-app.get("/posts/:title", (req, res) => {
+app.get("/posts/:title",async (req, res) => {
   try {
     req.params.title = req.params.title
       .trim()
       .replace("-", " ")
       .toLocaleLowerCase();
-    let post = posts.find(
-      (post) => post.title.toLowerCase() == req.params.title
-    );
+    let post = await blogModel.findOne({title: req.params.title});
     res.render("post", {
       post: post,
       pageTitle: "The Daily Journal | Posts | " + post.title,
@@ -52,14 +48,14 @@ app.get("/posts/:title", (req, res) => {
     res.status(404).render('error404',{pageTitle: "Page Not Found....!"})
   }
 });
-app.post("/compose", (req, res) => {
-  const post = {
+app.post("/compose",async (req, res) => {
+  const post = new blogModel({
     title: req.body.title.trim(),
     desc: req.body.desc,
     author: req.body.author,
-    on: new Date().toLocaleDateString("en-IN"),
-  };
-  posts.unshift(post);
+    date: new Date().toLocaleDateString("en-IN"),
+  });
+  post.save();
   res.redirect("/");
 });
 app.get('*', function(req, res){

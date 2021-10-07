@@ -4,7 +4,7 @@
     </h3>
     <p>
         <%= post.desc.substring(0, 200) + " ..." %>
-            <a class="text-decoration-none" href="/posts/<%= post.title%>">Read more</a>
+            <a class="text-decoration-none" href="/posts/<%= post.postLinkTitle%>">Read more</a>
     </p>
     <p class="text-muted">posted by <%= post.author%> on <%=post.date%>.</p>
 </div>

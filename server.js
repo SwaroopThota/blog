@@ -3,6 +3,7 @@ const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 const mongoose = require("mongoose");
 const blogModel = require("./models/blog-model");
+const _ = require("lodash");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -35,11 +36,7 @@ app.get("/posts",async (req, res) => {
 });
 app.get("/posts/:title",async (req, res) => {
   try {
-    req.params.title = req.params.title
-      .trim()
-      .replace("-", " ")
-      .toLocaleLowerCase();
-    let post = await blogModel.findOne({title: req.params.title});
+    let post = await blogModel.findOne({postLinkTitle: req.params.title});
     res.render("post", {
       post: post,
       pageTitle: "The Daily Journal | Posts | " + post.title,
@@ -51,6 +48,7 @@ app.get("/posts/:title",async (req, res) => {
 app.post("/compose",async (req, res) => {
   const post = new blogModel({
     title: req.body.title.trim(),
+    postLinkTitle: _.kebabCase(req.body.title.trim()),
     desc: req.body.desc,
     author: req.body.author,
     date: new Date().toLocaleDateString("en-IN"),

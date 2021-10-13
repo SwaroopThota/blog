@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.set("layout", "./layouts/layout");
 
 app.get("/",async (req, res) => {
-const posts = await blogModel.find();
+const posts = await blogModel.find().limit(10).sort({'_id':-1});
   res.render("home", { pageTitle: "The Daily Journal", posts: posts });
 });
 app.get("/contact", (req, res) => {
@@ -31,7 +31,7 @@ app.get("/compose", (req, res) => {
   res.render("compose", { pageTitle: "The Daily Journal | Compose" });
 });
 app.get("/posts",async (req, res) => {
-  const posts = await blogModel.find();
+  const posts = await blogModel.find().sort({'_id':-1});
   res.render("posts", { posts: posts, pageTitle: "The Daily Journal | Posts" });
 });
 app.get("/posts/:title",async (req, res) => {
@@ -50,8 +50,7 @@ app.post("/compose",async (req, res) => {
     title: req.body.title.trim(),
     postLinkTitle: _.kebabCase(req.body.title.trim()),
     desc: req.body.desc,
-    author: req.body.author,
-    date: new Date().toLocaleDateString("en-IN"),
+    author: (req.body.author!== "")?req.body.author:undefined
   });
   post.save();
   res.redirect("/");

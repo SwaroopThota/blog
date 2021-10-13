@@ -1,10 +1,6 @@
 <div class="my-4">
-    <h3>
+    <a class="text-decoration-none h3 text-black" href="/posts/<%= post.postLinkTitle%>">
         <%= post.title %>
-    </h3>
-    <p>
-        <%= post.desc.substring(0, 200) + " ..." %>
-            <a class="text-decoration-none" href="/posts/<%= post.postLinkTitle%>">Read more</a>
-    </p>
+    </a>
     <p class="text-muted">posted by <%= post.author%> on <%=post.date%>.</p>
 </div>

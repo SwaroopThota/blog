@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose")
 
-const blogSchema = mongoose.Schema({
-    title:{type:'string', required:true},
-    postLinkTitle:{type:'string', required:true},
-    desc:{type:'string', required:true},
-    author:{type:'string', required:true},
-    date:{type:'string', required:true}
-})
+let todoSchema = {
+    title: { type: String,required: true},
+    postLinkTitle: { type: String, required: true},
+    desc: { type: String, required: true},
+    author: { type: String, required: true ,default: 'Swaroop'},
+    date: { type: String, required: true, default: new Date().toLocaleDateString("en-IN")}
+}
 
-module.exports = mongoose.model("blogModel",blogSchema);
+module.exports = mongoose.model('blogModel',mongoose.Schema(todoSchema));

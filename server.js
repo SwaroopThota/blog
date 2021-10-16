@@ -55,6 +55,7 @@ app.get("/posts/:title/edit",(req, res) =>{
     let post = req.post;
     res.render("compose", {
       desc: post.desc,
+      author: post.author,
       pageTitle: "The Daily Journal | Post Edit | " + post.title,
       postEndpoint: `/posts/${post.postLinkTitle}/edit`,
     });

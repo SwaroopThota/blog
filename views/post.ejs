@@ -1,6 +1,7 @@
 <h1>
     <%= post.title %>
 </h1>
-<pre><%= post.desc %></pre>
+<div class="container d-flex justify-content-end"><a href="/posts/<%= post.postLinkTitle %>/edit" class="btn btn-primary">Edit</a><btn class="btn btn-danger deleteBtn mx-3" data-postTitle="<%= post.postLinkTitle %>" onclick="deletePost()">Delete Post</btn></div>
+<pre><%=post.desc%></pre>
 <p class="text-muted">posted by <%= post.author%> on <%=post.date%>.</p>
-<a href="#" onclick="history.go(-1)" class="btn btn-outline-primary">Go back</a>
+<a href="/posts" class="btn btn-outline-primary">Go back</a>

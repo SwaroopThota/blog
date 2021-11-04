@@ -8,8 +8,9 @@ const _ = require("lodash");
 const app = express();
 const port = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/firstdb")
-.then(()=>{console.log("Connection Successful")})
-.catch(err => console.log(err));
+const db = mongoose.connection;
+db.on('error', err =>console.error(err));
+db.once('open',()=>{console.log("Connected to MongoDB successfully")})
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -19,8 +20,17 @@ app.use(express.urlencoded({ extended: true }));
 app.set("layout", "./layouts/layout");
 
 app.get("/",async (req, res) => {
-const posts = await blogModel.find().limit(10).sort({'_id':-1});
-  res.render("home", { pageTitle: "The Daily Journal", posts: posts });
+  const searchOptions = {};
+  if(req.query.title !== null || req.query.title !== ''){
+    searchOptions.title = new RegExp(req.query.title,'i');
+  }
+  try{
+    const posts = await blogModel.find(searchOptions).sort({'_id':-1}).limit(10).exec();
+  res.render("home", { pageTitle: "The Daily Journal", posts: posts, searchOptions: req.query.title, url: '/' });
+  }catch (e) {
+    res.sendStatus(500);
+    console.log(e)
+  }
 });
 app.get("/contact", (req, res) => {
   res.render("contact", { pageTitle: "The Daily Journal | Contact" });
@@ -32,8 +42,17 @@ app.get("/compose", (req, res) => {
   res.render("compose", { pageTitle: "The Daily Journal | Compose", postEndpoint: "/compose" });
 });
 app.get("/posts",async (req, res) => {
-  const posts = await blogModel.find().sort({'_id':-1});
-  res.render("posts", { posts: posts, pageTitle: "The Daily Journal | Posts" });
+  const searchOptions = {};
+  if(req.query.title !== null || req.query.title !== ''){
+    searchOptions.title = new RegExp(req.query.title,'i');
+  }
+  try{
+    const posts = await blogModel.find(searchOptions).sort({'_id':-1}).exec();
+    res.render("posts", { pageTitle: "The Daily Journal | All Posts", posts: posts, searchOptions: req.query.title, url: '/posts' });
+  }catch (e) {
+    res.sendStatus(404);
+    console.log(e)
+  }
 });
 app.get("/posts/:title",(req, res) => {
     let post = req.post;
@@ -63,18 +82,27 @@ app.get("/posts/:title/edit",(req, res) =>{
 app.post("/posts/:title/edit", async (req, res) =>{
     let post = req.post;
     post.desc = req.body.desc;
-    await post.save();
-    res.redirect(`/posts/${post.postLinkTitle}`);
+    post.author = req.body.author;
+    try {
+      await post.save();
+      res.redirect(`/posts/${post.postLinkTitle}`);
+    } catch (error) {
+      res.sendStatus(500);
+    }
 })
 app.post("/compose",async (req, res) => {
-  const post = new blogModel({
-    title: req.body.title.trim(),
-    postLinkTitle: _.kebabCase(req.body.title.trim()),
-    desc: req.body.desc,
-    author: (req.body.author!== "")?req.body.author:undefined
-  });
-  post.save();
-  res.redirect("/");
+  try {
+    const post = new blogModel({
+      title: req.body.title.trim(),
+      postLinkTitle: _.kebabCase(req.body.title.trim()),
+      desc: req.body.desc,
+      author: (req.body.author!== "")?req.body.author:undefined
+    });
+    post.save();
+    res.redirect("/");
+  } catch (error) {
+    res.sendStatus(500);
+  }
 });
 app.param("title", async (req, res,next,title) => {
   try {

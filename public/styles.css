@@ -7,7 +7,9 @@
 .body {
   min-height: calc(100vh - 116px);
 }
-
+pre code{
+  margin: 1rem 0;
+}
 @media only screen and (max-width: 600px) {
   .navbar-brand {
     letter-spacing: 2px;

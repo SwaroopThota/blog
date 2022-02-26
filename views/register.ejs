@@ -1,0 +1,23 @@
+<form action="/register" method="post">
+    <h2 class="mb-3">Register Form:</h2>
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="username" id="username" placeholder="name"
+            value="<%= locals.username %>" required>
+        <label for="username">Username</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com"
+            value="<%= locals.email %>" required>
+        <label for="email">Email address</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" required name="pass" id="pass" placeholder="password" autocomplete>
+        <label for="pass">Password</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" required name="cpass" id="cpass" placeholder="password"
+            autocomplete>
+        <label for="cpass">Confirm Password</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>

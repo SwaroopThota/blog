@@ -22,33 +22,45 @@
     </title>
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="/">THE DAILY JOURNAL</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-                <div class="navbar-nav align-items-center">
-                    <a class="nav-link" href="/">Home</a>
-                    <a class="nav-link" href="/about">About Us</a>
-                    <a class="nav-link" href="/contact">Contact</a>
-                    <a class="btn btn-outline-primary mx-3" href="/compose">Compose a Post!</a>
+<body <% if(locals.errors){ %>
+    onload="alert('<%= locals.errors %>')"
+        <% } %> >
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container">
+                    <a class="navbar-brand" href="/">THE DAILY JOURNAL</a>
+                    <% if(locals.isLoggedOut) {%>
+                        <div class="btn-group mx-2">
+                            <a class="btn btn-outline-primary" href="/login">Login</a>
+                            <a class="btn btn-outline-primary" href="/register">Signup</a>
+                        </div>
+                        <% }else{ %>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                                <div class="navbar-nav align-items-center">
+                                    <a class="nav-link" href="/">Home</a>
+                                    <a href="/posts" class="nav-link">All posts</a>
+                                    <a href="/posts/me" class="nav-link">My posts</a>
+                                    <a class="btn btn-outline-primary m-2" href="/compose">Compose a Post!</a>
+                                    <a class="btn btn-outline-danger logoutBtn">Logout</a>
+                                    <% } %>
+                                </div>
+                            </div>
                 </div>
+            </nav>
+            <div class="container-sm body py-5">
+                <%- body %>
             </div>
-        </div>
-    </nav>
-    <div class="container-sm body py-5">
-        <%- body %>
-    </div>
-    <footer class="navbar navbar-light bg-light" style="height: 60px;background-color: #1abc9c !important;">
-        <div class="container justify-content-center align-items-center">
-            <p class="text-light p-0 m-0">Made with ❤️ by TJ SWAROOP</p>
-        </div>
-    </footer>
-    </div>
+            <footer class="navbar navbar-light bg-light" style="height: 60px;background-color: #1abc9c !important;">
+                <div class="container justify-content-center align-items-center">
+                    <p class="text-light p-0 m-0">Made with ❤️ by TJ SWAROOP</p>
+                </div>
+            </footer>
+            </div>
 </body>
 <!-- Bootstarp -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
@@ -58,7 +70,10 @@
     integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/"
     crossorigin="anonymous"></script>
 <!-- highlight js -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/atom-one-light.min.css" integrity="sha512-o5v54Kh5PH0dgnf9ei0L+vMRsbm5fvIvnR/XkrZZjN4mqdaeH7PW66tumBoQVIaKNVrLCZiBEfHzRY4JJSMK/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" /><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/atom-one-light.min.css"
+    integrity="sha512-o5v54Kh5PH0dgnf9ei0L+vMRsbm5fvIvnR/XkrZZjN4mqdaeH7PW66tumBoQVIaKNVrLCZiBEfHzRY4JJSMK/Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         document.querySelectorAll('pre code').forEach((el) => {
@@ -66,18 +81,30 @@
         });
     });
     const deleteBtn = document.querySelector(".deleteBtn");
-    deleteBtn.onclick = () => {
-        if (confirm("Are you sure you want to delete this post?")) {
-            let postTitle = deleteBtn.getAttribute("data-postTitle")
-            fetch("/posts/" + postTitle, {
-                method: 'DELETE'
-            })
-                .then(() => {
-                    window.location.pathname = '/posts';
+    if (deleteBtn) {
+        deleteBtn.onclick = () => {
+            if (confirm("Are you sure you want to delete this post?")) {
+                let postTitle = deleteBtn.getAttribute("data-postTitle")
+                fetch("/posts/" + postTitle, {
+                    method: 'DELETE'
                 })
-                .catch(() => {
-                    window.location.pathname = '/';
-                })
+                    .then(() => {
+                        window.location.pathname = '/posts';
+                    })
+                    .catch(() => {
+                        window.location.pathname = '/';
+                    })
+            }
+        }
+    }
+    const logoutBtn = document.querySelector('.logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.onclick = (e) => {
+            e.preventDefault();
+            if (confirm("Do you really want to logout?")) {
+                document.cookie = "blog-auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+                window.location.pathname = '/login';
+            }
         }
     }
 </script>

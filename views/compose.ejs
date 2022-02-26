@@ -1,14 +1,14 @@
-<h1>Compose</h1>
+<h2>
+    <%= locals.title %>
+</h2>
 <form action="<%= postEndpoint %>" method="post">
     <div class="form-group">
         <label class="form-label" for="title">Title</label>
-        <input class="form-control" type="text" name="title" id="title" required autocomplete="off" 
-        <%= (locals.desc)?"disabled":"" %> autoFocus>
+        <input class="form-control" type="text" name="title" id="title" required autocomplete="off"
+            <%=(locals.desc)?"disabled":"" %> autoFocus>
         <label class="form-label" for="description">Post</label>
-        <textarea class="form-control" name="desc" id="desc" cols="10" rows="5" required><%= locals.desc %></textarea>
-        <p class="form-text">You can extend the height of input area from the bottom right.</p>
-        <label class="form-label" for="author">Author</label>
-        <input class="form-control mb-3" type="text" name="author" id="author" value="<%= locals.author %>" autocomplete="off">
+        <textarea class="form-control mb-3" name="desc" id="desc" cols="10" rows="15"
+            required><%= locals.desc %></textarea>
         <input class="btn btn-primary me-3" type="submit" value="Publish">
         <button class="btn btn-danger" onclick="history.go(-1);">cancel</button>
     </div>

@@ -1,10 +1,9 @@
 <h1>Recent Posts</h1>
-<%- include('./partials/search') %>
 <% if(posts.length> 0){ %>
     <% posts.forEach(post=>{ %>
         <%- include('partials/_display_post',{post:post}) %>
-    <% });%>
-    <a href="/posts" class="btn btn-primary">Load more</a>
-<%}else{ %>
-        <p>No posts to display.</p>
-<% } %>
+            <% });%>
+                <a href="/posts" class="btn btn-primary">Load more</a>
+                <%}else{ %>
+                    <p class="m-3">No posts to display.</p>
+                    <% } %>

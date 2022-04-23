@@ -1,4 +1,6 @@
 <div style="text-align:center; padding-top: 10%;">
-    <img style="max-width: 100%;" src="https://media3.giphy.com/media/hEc4k5pN17GZq/giphy.gif" alt="">
-    <p><span style="font-size: 3.5rem;">ERROR:404</span><br>Page not found</p>
+    <img style="max-width: 100%;" src="<%= locals.imgUrl %>" alt="error image">
+    <p><span style="font-size: 3.5rem;">ERROR:<%= locals.code %></span><br>
+        <%= locals.msg %>
+    </p>
 </div>

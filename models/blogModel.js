@@ -9,7 +9,7 @@ let blogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
-  date: { type: String, default: new Date().toLocaleDateString("en-IN") },
+  date: { type: String, default: Date.now },
 });
 
 module.exports = mongoose.model("blog", blogSchema);

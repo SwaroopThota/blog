@@ -46,7 +46,7 @@
                                     <a href="/posts" class="nav-link">All posts</a>
                                     <a href="/posts/me" class="nav-link">My posts</a>
                                     <a class="btn btn-outline-primary m-2" href="/compose">Compose a Post!</a>
-                                    <a class="btn btn-outline-danger logoutBtn">Logout</a>
+                                    <button class="btn btn-outline-danger logoutBtn">Logout</button>
                                     <% } %>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
     integrity="sha512-o5v54Kh5PH0dgnf9ei0L+vMRsbm5fvIvnR/XkrZZjN4mqdaeH7PW66tumBoQVIaKNVrLCZiBEfHzRY4JJSMK/Q=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
-<script>
+<script defer>
     document.addEventListener('DOMContentLoaded', (event) => {
         document.querySelectorAll('pre code').forEach((el) => {
             hljs.highlightElement(el);

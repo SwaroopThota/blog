@@ -28,28 +28,28 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
                     <a class="navbar-brand" href="/">THE DAILY JOURNAL</a>
-                    <% if(locals.isLoggedOut) {%>
-                        <div class="btn-group mx-2">
-                            <a class="btn btn-outline-primary" href="/login">Login</a>
-                            <a class="btn btn-outline-primary" href="/register">Signup</a>
-                        </div>
-                        <% }else{ %>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-                                <div class="navbar-nav align-items-center">
-                                    <a class="nav-link" href="/">Home</a>
-                                    <a href="/posts" class="nav-link">All posts</a>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                        <div class="navbar-nav align-items-center">
+                            <a class="nav-link" href="/">Home</a>
+                            <a href="/posts" class="nav-link">All posts</a>
+                            <% if(!locals.isLoggedIn) {%>
+                                <div class="btn-group mx-2">
+                                    <a class="btn btn-outline-primary" href="/login">Login</a>
+                                    <a class="btn btn-outline-primary" href="/register">Signup</a>
+                                </div>
+                                <% }else{%>
                                     <a href="/posts/me" class="nav-link">My posts</a>
                                     <a class="btn btn-outline-primary m-2" href="/compose">Compose a Post!</a>
                                     <button class="btn btn-outline-danger logoutBtn">Logout</button>
-                                    <% } %>
-                                </div>
+                                <% } %>
                             </div>
+                    </div>
                 </div>
             </nav>
             <div class="container-sm body py-5">

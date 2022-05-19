@@ -6,10 +6,13 @@ const jsonwebtoken = require("jsonwebtoken");
 const auth = (req, res, next) => {
   const token = req.cookies["blog-auth-token"];
   if (!token) {
-    return res.redirect("/login");
+    req.isLoggedIn = false
+    next()
+    return
   }
   try {
     req.token = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY).user.id;
+    req.isLoggedIn = true
     next();
   } catch (err) {
     console.log(err.message);

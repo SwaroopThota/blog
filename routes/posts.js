@@ -19,6 +19,7 @@ router.get("/", auth, async (req, res) => {
       searchOptions: req.query.title,
       title: "All posts",
       url: "/posts",
+      isLoggedIn: req.isLoggedIn
     });
   } catch (err) {
     console.log(err.message);
@@ -32,6 +33,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 router.get("/me", auth, async (req, res) => {
+  if(!req.isLoggedIn) return res.redirect('/')
   const searchOptions = { author: req.token };
   if (req.query.title !== null || req.query.title !== "") {
     searchOptions.title = new RegExp(req.query.title, "i");
@@ -42,13 +44,14 @@ router.get("/me", auth, async (req, res) => {
       .sort({ date: -1 })
       .populate("author", ["username"])
       .exec();
-    res.render("posts", {
-      pageTitle: "The Daily Journal | My Posts",
-      posts: posts,
-      searchOptions: req.query.title,
-      title: "My posts",
-      url: "/posts/me",
-    });
+    res.render('posts', {
+		pageTitle: 'The Daily Journal | My Posts',
+		posts: posts,
+		searchOptions: req.query.title,
+		title: 'My posts',
+		url: '/posts/me',
+		isLoggedIn: req.isLoggedIn,
+	})
   } catch (err) {
     console.log(err.message);
     res.status(500).render("error404", {
@@ -62,11 +65,12 @@ router.get("/me", auth, async (req, res) => {
 });
 router.get("/:title", auth, (req, res) => {
   let post = req.post;
-  res.render("post", {
-    post: post,
-    pageTitle: "The Daily Journal | Posts | " + post.title,
-    isAuthorized: req.token === post.author.id.toString(),
-  });
+  res.render('post', {
+		post: post,
+		pageTitle: 'The Daily Journal | Posts | ' + post.title,
+		isAuthorized: req.isLoggedIn && req.token === post.author.id.toString(),
+		isLoggedIn: req.isLoggedIn,
+  })
 });
 router.delete("/:title", auth, async (req, res) => {
   try {
@@ -86,19 +90,20 @@ router.delete("/:title", auth, async (req, res) => {
 });
 router.get("/:title/edit", auth, (req, res) => {
   let post = req.post;
-  if (post.author.id.toString() !== req.token.toString()) {
+  if (!req.isLoggedIn && post.author.id.toString() !== req.token.toString()) {
     return res.redirect("/posts");
   }
-  res.render("compose", {
-    desc: post.desc,
-    pageTitle: "The Daily Journal | Post Edit | " + post.title,
-    postEndpoint: `/posts/${post.postLinkTitle}/edit`,
-    title: "Edit Blog",
-  });
+  res.render('compose', {
+		desc: post.desc,
+		pageTitle: 'The Daily Journal | Post Edit | ' + post.title,
+		postEndpoint: `/posts/${post.postLinkTitle}/edit`,
+		title: 'Edit Blog',
+		isLoggedIn: req.isLoggedIn,
+  })
 });
 router.post("/:title/edit", auth, async (req, res) => {
   let post = req.post;
-  if (post.author.id.toString() !== req.token.toString()) {
+  if (!req.isLoggedIn && post.author.id.toString() !== req.token.toString()) {
     return res.redirect("/posts");
   }
   post.desc = req.body.desc;

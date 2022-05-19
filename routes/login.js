@@ -2,9 +2,8 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 const bcryptjs = require("bcryptjs");
-const { check, validationResult, body } = require("express-validator");
+const {  validationResult, body } = require("express-validator");
 const jsonwebtoken = require("jsonwebtoken");
-const auth = require("../middleware/auth");
 const userModel = require("../models/userModel");
 
 const router = require("express").Router();
@@ -15,7 +14,7 @@ router.get("/", (req, res) => {
   }
   res.render("login", {
     pageTitle: "The Daily Journal | Login",
-    isLoggedOut: true,
+    isLoggedIn: false,
   });
 });
 

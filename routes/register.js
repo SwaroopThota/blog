@@ -5,7 +5,6 @@ const router = require("express").Router();
 const bcryptjs = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const jsonwebtoken = require("jsonwebtoken");
-const auth = require("../middleware/auth");
 const userModel = require("../models/userModel");
 
 router.get("/", (req, res) => {
@@ -14,7 +13,7 @@ router.get("/", (req, res) => {
   }
   res.render("register", {
     pageTitle: "The Daily Journal | Register",
-    isLoggedOut: true,
+    isLoggedIn: false,
   });
 });
 

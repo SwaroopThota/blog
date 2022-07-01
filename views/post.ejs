@@ -9,7 +9,7 @@
             Post</btn>
     </div>
     <% } %>
-        <pre><code class="language-java"><%=post.desc%></code></pre>
+        <code style="white-space: pre-wrap; color: initial;"class="highlight language-<%= post.lang ? post.lang : "java" %>"><%=post.desc%></code>
         <p class="text-muted">posted by <%= post.author.username %> on <%=new
                     Date(parseInt(post.date)).toLocaleDateString("en-IN")%>.</p>
         <a href="/posts" class="btn btn-outline-primary">Go back</a>

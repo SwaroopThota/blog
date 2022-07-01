@@ -46,9 +46,9 @@
                                 <% }else{%>
                                     <a href="/posts/me" class="nav-link">My posts</a>
                                     <a class="btn btn-outline-primary m-2" href="/compose">Compose a Post!</a>
-                                    <button class="btn btn-outline-danger logoutBtn">Logout</button>
-                                <% } %>
-                            </div>
+                                    <a class="btn btn-outline-danger" href="/logout">Logout</a>
+                                    <% } %>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -75,10 +75,8 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
 <script defer>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('pre code').forEach((el) => {
-            hljs.highlightElement(el);
-        });
+    document.querySelectorAll('code.highlight').forEach((el) => {
+        hljs.highlightElement(el);
     });
     const deleteBtn = document.querySelector(".deleteBtn");
     if (deleteBtn) {
@@ -94,16 +92,6 @@
                     .catch(() => {
                         window.location.pathname = '/';
                     })
-            }
-        }
-    }
-    const logoutBtn = document.querySelector('.logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.onclick = (e) => {
-            e.preventDefault();
-            if (confirm("Do you really want to logout?")) {
-                document.cookie = "blog-auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
-                window.location.pathname = '/login';
             }
         }
     }

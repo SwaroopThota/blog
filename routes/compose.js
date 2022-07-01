@@ -21,6 +21,7 @@ router.post('/', auth, async (req, res) => {
 			postLinkTitle: _.kebabCase(req.body.title.trim()),
 			desc: req.body.desc,
 			author: req.token,
+			lang: req.body.lang
 		})
 		await post.save()
 		res.redirect('/posts/' + post.postLinkTitle)

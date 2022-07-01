@@ -59,6 +59,21 @@ app.get('/', auth, async (req, res) => {
 		})
 	}
 })
+app.get('/logout', auth, async (req, res) => {
+	try {
+		if(!req.isLoggedIn) return res.redirect('/')
+		res.clearCookie('blog-auth-token')
+		return res.redirect('/')
+	} catch (err) {
+		console.log(err.message)
+		res.status(500).render('error404', {
+			pageTitle: 'Sever Error....!',
+			code: 500,
+			msg: 'Internal server error',
+			imgUrl: 'https://media3.giphy.com/media/H7wajFPnZGdRWaQeu0/200w.webp?cid=ecf05e4704ipiq5hlzkysb22npqo18055y1vx58pqee148ek&rid=200w.webp&ct=g',
+		})
+	}
+})
 
 app.get('*', auth, function (req, res) {
 	res.status(404).render('error404', {

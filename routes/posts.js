@@ -69,7 +69,7 @@ router.get("/:title", auth, (req, res) => {
 		post: post,
 		pageTitle: 'The Daily Journal | Posts | ' + post.title,
 		isAuthorized: req.isLoggedIn && req.token === post.author.id.toString(),
-		isLoggedIn: req.isLoggedIn,
+		isLoggedIn: req.isLoggedIn
   })
 });
 router.delete("/:title", auth, async (req, res) => {
@@ -99,6 +99,7 @@ router.get("/:title/edit", auth, (req, res) => {
 		postEndpoint: `/posts/${post.postLinkTitle}/edit`,
 		title: 'Edit Blog',
 		isLoggedIn: req.isLoggedIn,
+    lang: post.lang
   })
 });
 router.post("/:title/edit", auth, async (req, res) => {
@@ -106,6 +107,7 @@ router.post("/:title/edit", auth, async (req, res) => {
   if (!req.isLoggedIn && post.author.id.toString() !== req.token.toString()) {
     return res.redirect("/posts");
   }
+  post.lang = req.body.lang
   post.desc = req.body.desc;
   try {
     await post.save();

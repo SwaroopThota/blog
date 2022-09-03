@@ -4,9 +4,8 @@
 <% if(isAuthorized){ %>
     <div class="container d-flex justify-content-end">
         <a href="/posts/<%= post.postLinkTitle %>/edit" class="btn btn-primary">Edit</a>
-        <btn class="btn btn-danger deleteBtn mx-3" data-postTitle="<%= post.postLinkTitle %>" onclick="deletePost()">
-            Delete
-            Post</btn>
+        <btn class="btn btn-danger deleteBtn mx-3" data-postTitle="<%= post.postLinkTitle %>">
+            Delete Post</btn>
     </div>
     <% } %>
         <code style="white-space: pre-wrap; color: initial;"class="highlight language-<%= post.lang ? post.lang : "java" %>"><%=post.desc%></code>

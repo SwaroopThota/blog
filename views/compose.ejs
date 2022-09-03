@@ -7,9 +7,10 @@
         <%=(locals.desc)?"disabled":"" %> autoFocus />
     <label class="form-label" for="form-select">Language</label>
     <select class="form-select" name="lang">
-        <option <%= locals.lang && locals.lang === "plaintext" ? "selected" : "" %> value="plaintext">plain-text</option>
-        <option <%= !locals.lang || locals.lang === "java" ? "selected" : "" %> value="java">java</option>
+        <option <%= !locals.lang && locals.lang === "plaintext" ? "selected" : "" %> value="plaintext">plain-text</option>
+        <option <%= locals.lang || locals.lang === "java" ? "selected" : "" %> value="java">java</option>
         <option <%= locals.lang && locals.lang === "python" ? "selected" : "" %> value="python">python</option>
+        <option <%= locals.lang && locals.lang === "markdown" ? "selected" : "" %> value="markdown">Markdown</option>
         <option <%= locals.lang && locals.lang === "javascript" ? "selected" : "" %> value="javascript">javascript</option>
         <option <%= locals.lang && locals.lang === "cpp" ? "selected" : "" %> value="cpp">cpp</option>
     </select>

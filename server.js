@@ -45,7 +45,7 @@ app.get('/', auth, async (req, res) => {
 			.sort({ date: 'desc' })
 			.limit(10)
 		res.render('home', {
-			pageTitle: 'The Daily Journal',
+			pageTitle: 'NFN - Nerds For Nerds',
 			posts: posts,
 			isLoggedIn: req.isLoggedIn,
 		})
@@ -61,7 +61,7 @@ app.get('/', auth, async (req, res) => {
 })
 app.get('/logout', auth, async (req, res) => {
 	try {
-		if(!req.isLoggedIn) return res.redirect('/')
+		if (!req.isLoggedIn) return res.redirect('/')
 		res.clearCookie('blog-auth-token')
 		return res.redirect('/')
 	} catch (err) {

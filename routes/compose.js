@@ -6,7 +6,7 @@ const router = require('express').Router()
 router.get('/', auth, (req, res) => {
 	if (!req.isLoggedIn) return res.redirect('/')
 	res.render('compose', {
-		pageTitle: 'The Daily Journal | Compose',
+		pageTitle: 'NFN | Compose',
 		postEndpoint: '/compose',
 		title: 'Compose',
 		isLoggedIn: req.isLoggedIn,
@@ -21,7 +21,7 @@ router.post('/', auth, async (req, res) => {
 			postLinkTitle: _.kebabCase(req.body.title.trim()),
 			desc: req.body.desc,
 			author: req.token,
-			lang: req.body.lang
+			lang: req.body.lang,
 		})
 		await post.save()
 		res.redirect('/posts/' + post.postLinkTitle)
